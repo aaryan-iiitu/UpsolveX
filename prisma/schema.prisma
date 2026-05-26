@@ -1,0 +1,194 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User model
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  avatar    String?
+  bio       String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  contests    Contest[]
+  submissions Submission[]
+  problems    Problem[]
+  userStats   UserStats?
+  preferences UserPreferences?
+
+  @@index([email])
+}
+
+// User Statistics
+model UserStats {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  totalContests   Int      @default(0)
+  totalProblems   Int      @default(0)
+  solvedProblems  Int      @default(0)
+  maxRating       Int      @default(0)
+  currentRating   Int      @default(0)
+  accuracy        Float    @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([userId])
+}
+
+// User Preferences
+model UserPreferences {
+  id                String   @id @default(cuid())
+  userId            String   @unique
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  theme             String   @default("system") // light, dark, system
+  language          String   @default("en")
+  emailNotifications Boolean  @default(true)
+  privacyLevel      String   @default("public") // public, private
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([userId])
+}
+
+// Contest model
+model Contest {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  contestId   String   // External contest ID (e.g., Codeforces ID)
+  name        String
+  platform    String   // codeforces, atcoder, codechef, etc.
+  rating      Int?
+  rank        Int?
+  ratingChange Int?
+  startTime   DateTime
+  endTime     DateTime
+  isVirtual   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  submissions Submission[]
+  analysis    ContestAnalysis?
+
+  @@unique([userId, contestId, platform])
+  @@index([userId])
+  @@index([platform])
+}
+
+// Submission model
+model Submission {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  contestId   String?
+  contest     Contest? @relation(fields: [contestId], references: [id], onDelete: SetNull)
+  problemId   String
+  problem     Problem  @relation(fields: [problemId], references: [id], onDelete: Cascade)
+  verdict     String   // AC, WA, TLE, MLE, RE, CE, etc.
+  language    String
+  code        String? // Optionally store code
+  runtime     Int?
+  memory      Int?
+  submittedAt DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId])
+  @@index([problemId])
+  @@index([contestId])
+}
+
+// Problem model
+model Problem {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  externalId  String   // External problem ID
+  platform    String   // codeforces, atcoder, etc.
+  name        String
+  link        String?
+  difficulty  String?
+  tags        String[] // JSON array of tags
+  statement   String? // Problem statement
+  timeLimit   Int?
+  memoryLimit Int?
+  solved      Boolean  @default(false)
+  solveDate   DateTime?
+  isFavorite  Boolean  @default(false)
+  notes       String? // User notes
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  submissions Submission[]
+  recommendations Recommendation[]
+
+  @@unique([userId, externalId, platform])
+  @@index([userId])
+  @@index([platform])
+  @@index([solved])
+}
+
+// Contest Analysis
+model ContestAnalysis {
+  id          String   @id @default(cuid())
+  contestId   String   @unique
+  contest     Contest  @relation(fields: [contestId], references: [id], onDelete: Cascade)
+  totalProblems Int
+  solvedCount Int
+  partialCount Int
+  accuracy    Float
+  recommendations String[] // JSON array
+  strengths   String[]
+  weaknesses  String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([contestId])
+}
+
+// Learning Recommendation
+model Recommendation {
+  id          String   @id @default(cuid())
+  problemId   String
+  problem     Problem  @relation(fields: [problemId], references: [id], onDelete: Cascade)
+  title       String
+  description String
+  type        String   // concept, practice, editorial, discussion
+  url         String?
+  priority    String   @default("medium") // low, medium, high
+  daysToReview Int      @default(3) // Spaced repetition interval
+  lastReviewedAt DateTime?
+  nextReviewDate DateTime?
+  isCompleted Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([problemId])
+  @@index([nextReviewDate])
+}
+
+// Learning Progress
+model LearningProgress {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  conceptsLearned String[] // JSON array
+  practiceHours Float   @default(0)
+  streakDays  Int      @default(0)
+  lastPracticeDate DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
