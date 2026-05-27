@@ -23,7 +23,7 @@ export const validateRequest =
         .join(', ');
 
       res.status(400).json(
-        errorResponse('Validation Error', 400, errorMessages),
+        errorResponse( 'Validation Error', 400, errorMessages),
       );
     }
   };

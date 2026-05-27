@@ -1,8 +1,8 @@
 # UpsolveX - Competitive Programming Analytics Platform
 
-A production-grade SaaS platform for competitive programmers to analyze contests, practice problems, and improve skills using recommendation systems and spaced repetition.
+A platform for competitive programmers to analyze contests, practice problems, and improve skills using recommendation systems and spaced repetition.
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 - Node.js 18+
@@ -49,7 +49,7 @@ npm run dev
 
 Visit `http://localhost:3000` for the frontend and `http://localhost:3001` for the API.
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 UpsolveX/
@@ -93,7 +93,7 @@ UpsolveX/
 └── shared/                   # Shared types/utilities
 ```
 
-## 🏗️ Architecture
+##  Architecture
 
 ### Frontend Architecture
 - **Framework**: Next.js 15 (App Router)
@@ -120,7 +120,7 @@ UpsolveX/
 - **Recommendations**: AI-powered learning recommendations
 - **Analytics**: User performance analytics
 
-## 🔧 API Documentation
+##  API Documentation
 
 ### User Endpoints
 - `GET /api/users/profile` - Get user profile
@@ -143,7 +143,7 @@ UpsolveX/
 - `GET /api/problems/solved` - Get solved problems
 - `GET /api/problems/difficulty/:difficulty` - Get by difficulty
 
-## 🛠️ Development
+##  Development
 
 ### Available Scripts
 
@@ -168,7 +168,7 @@ npm run prisma:migrate  # Run migrations
 npm run prisma:studio   # Open Prisma Studio
 ```
 
-## 🐳 Docker
+##  Docker
 
 ### Run with Docker Compose
 ```bash
@@ -183,7 +183,7 @@ This starts:
 - Backend API (port 3001)
 - Frontend (port 3000)
 
-## 📊 Database Migrations
+##  Database Migrations
 
 ### Create a new migration
 ```bash
@@ -197,7 +197,7 @@ cd backend
 npm run prisma:studio
 ```
 
-## 🔐 Environment Variables
+##  Environment Variables
 
 See `.env.example` files in `frontend/`, `backend/`, and `docker/` directories.
 
@@ -208,7 +208,7 @@ See `.env.example` files in `frontend/`, `backend/`, and `docker/` directories.
 - `JWT_SECRET`: Secret for JWT tokens
 - `FRONTEND_URL`: Frontend application URL
 
-## 🧪 Testing (Future)
+##  Testing (Future)
 
 ```bash
 # Run tests
@@ -218,7 +218,7 @@ npm run test
 npm run test:coverage
 ```
 
-## 📈 Performance & Optimization
+##  Performance & Optimization
 
 - **Frontend**: Image optimization with Next.js Image
 - **Backend**: Request/response compression
@@ -226,7 +226,7 @@ npm run test:coverage
 - **Caching**: Redis for session management
 - **API**: Rate limiting middleware
 
-## 🚀 Deployment
+##  Deployment
 
 ### Frontend (Vercel recommended)
 ```bash
@@ -245,27 +245,17 @@ npm run build
 ### Database
 Use managed PostgreSQL services (AWS RDS, DigitalOcean, Supabase)
 
-## 🤝 Contributing
+##  Contributing
 
 1. Create a feature branch
 2. Make your changes
 3. Submit a pull request
 
-## 📝 Code Style
+##  Code Style
 
 - ESLint for linting
 - Prettier for code formatting
 - TypeScript for type safety
 - Consistent naming conventions
 
-## 📄 License
 
-MIT
-
-## 📞 Support
-
-For issues and questions, open an GitHub issue or contact the team.
-
----
-
-Built with ❤️ for competitive programmers
